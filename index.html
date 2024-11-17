@@ -11,6 +11,19 @@
     <link href="/sereceipt/static/css/2.0d77bc6e.chunk.css" rel="stylesheet">
     <link href="/sereceipt/static/css/main.415cb014.chunk.css" rel="stylesheet">
     <title>Invoice Generator</title>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sereceipt/service-worker.js')
+            .then(function(registration) {
+              console.log('ServiceWorker registration successful');
+            })
+            .catch(function(err) {
+              console.log('ServiceWorker registration failed: ', err);
+            });
+        });
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

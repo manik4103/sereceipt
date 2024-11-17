@@ -37,3 +37,20 @@ workbox.routing.registerNavigationRoute(workbox.precaching.getCacheKeyForURL("/i
   
   blacklist: [/^\/_/,/\/[^/?]+\.[^/]+$/],
 });
+
+self.addEventListener('install', function(event) {
+  // Skip waiting to activate the service worker immediately
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', function(event) {
+  event.waitUntil(
+    caches.keys().then(function(cacheNames) {
+      return Promise.all(
+        cacheNames.map(function(cacheName) {
+          return caches.delete(cacheName);
+        })
+      );
+    })
+  );
+});
