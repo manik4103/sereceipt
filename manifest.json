@@ -1,6 +1,7 @@
 {
   "short_name": "Invoice Generator",
   "name": "React Invoice Generator",
+  "homepage": "/sereceipt",
   "icons": [
     {
       "src": "favicon.ico",
