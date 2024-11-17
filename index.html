@@ -12,11 +12,34 @@
     <link href="/sereceipt/static/css/main.415cb014.chunk.css" rel="stylesheet">
     <title>Invoice Generator</title>
     <script>
+      window.BASE_URL = '/sereceipt';
+      window.PUBLIC_URL = '/sereceipt';
+      
+      (function() {
+        var originalFetch = window.fetch;
+        window.fetch = function(url, options) {
+          if (typeof url === 'string' && url.startsWith('/static/')) {
+            url = '/sereceipt' + url;
+          }
+          return originalFetch.call(this, url, options);
+        };
+      })();
+    </script>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script>
       window.addEventListener('load', function() {
         if ('serviceWorker' in navigator) {
-          window.__SERVICE_WORKER_REGISTRATION__ = true;
-          navigator.serviceWorker.register('/sereceipt/service-worker.js', {
-            scope: '/sereceipt/'
+          navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for(let registration of registrations) {
+              registration.unregister();
+            }
+          }).then(function() {
+            return navigator.serviceWorker.register('/sereceipt/service-worker.js', {
+              scope: '/sereceipt/'
+            });
           }).then(function(registration) {
             console.log('ServiceWorker registration successful with scope: ', registration.scope);
           }).catch(function(err) {
@@ -24,13 +47,6 @@
           });
         }
       });
-    </script>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <script>
-      window.PUBLIC_URL = '/sereceipt';
     </script>
     <script src="/sereceipt/static/js/runtime-main.6ee9ec60.js"></script>
     <script src="/sereceipt/static/js/2.48581742.chunk.js"></script>
