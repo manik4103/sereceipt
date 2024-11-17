@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.0e82d7dd83619453f731abfbe49c4942.js"
+  "/sereceipt/precache-manifest.0e82d7dd83619453f731abfbe49c4942.js"
 );
 
 self.addEventListener('message', (event) => {
@@ -31,15 +31,22 @@ workbox.core.clientsClaim();
  * See https://goo.gl/S9QRab
  */
 self.__precacheManifest = [].concat(self.__precacheManifest || []);
-workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
+workbox.precaching.precacheAndRoute(
+  self.__precacheManifest.map(entry => ({
+    ...entry,
+    url: entry.url.startsWith('/') ? `/sereceipt${entry.url}` : entry.url
+  })), 
+  {}
+);
 
-workbox.routing.registerNavigationRoute(workbox.precaching.getCacheKeyForURL("/index.html"), {
-  
-  blacklist: [/^\/_/,/\/[^/?]+\.[^/]+$/],
-});
+workbox.routing.registerNavigationRoute(
+  workbox.precaching.getCacheKeyForURL("/sereceipt/index.html"),
+  {
+    blacklist: [/^\/_/, /\/[^/?]+\.[^/]+$/],
+  }
+);
 
 self.addEventListener('install', function(event) {
-  // Skip waiting to activate the service worker immediately
   self.skipWaiting();
 });
 
@@ -54,3 +61,10 @@ self.addEventListener('activate', function(event) {
     })
   );
 });
+
+workbox.routing.registerRoute(
+  /\.svg$/,
+  new workbox.strategies.CacheFirst({
+    cacheName: 'svg-cache',
+  })
+);
